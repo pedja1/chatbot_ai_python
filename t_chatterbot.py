@@ -17,7 +17,7 @@ bot = ChatBot(
     storage_adapter='chatterbot.storage.JsonFileStorageAdapter',
     logic_adapters=[
         {
-           'import_path': 'MultiResponse'
+           'import_path': 'chatterbot.logic.BestMatch'
         },
         {
             'import_path': 'chatterbot.logic.LowConfidenceAdapter',
@@ -33,43 +33,23 @@ bot = ChatBot(
 
 # bot.train("chatterbot.corpus.english")
 bot.train([
-    "hello",
-    "hi",
-    "hello"
+    "cao",
+    "zdravo"
 ])
 bot.train([
-    "What is your name?",
-    "ChatterBot"
+    "Ponuda telefona",
+    "ponuda_telefona"
 ])
 bot.train([
-    "What is my name?",
-    "pedja"
+    "telefoni",
+    "ponuda_telefona"
 ])
 bot.train([
-    "Tell me about telenor postpaid plans",
-    "Post paid packages"
-])
-bot.train([
-    "postpaid plans",
-    "Post paid packages"
+    "mobilni",
+    "ponuda_telefona"
 ])
 
 DEFAULT_SESSION_ID = bot.default_session.id_string
-
-
-def get_feedback():
-    from chatterbot.utils import input_function
-
-    text = input_function()
-
-    if 'Yes' in text:
-        return True
-    elif 'No' in text:
-        return False
-    else:
-        print('Please type either "Yes" or "No"')
-        return get_feedback()
-
 
 print('Type something to begin...')
 
@@ -79,13 +59,7 @@ while True:
         input_statement = bot.input.process_input_statement()
         statement, response, confidence = bot.generate_response(input_statement, DEFAULT_SESSION_ID)
 
-        print('\n Is "{}" this a coherent response to "{}"? \n'.format(response, input_statement))
-        print(confidence)
-
-        if get_feedback():
-            bot.learn_response(response, input_statement)
-
-        bot.output.process_response(response)
+        print(response)
 
         # Update the conversation history for the bot
         # It is important that this happens last, after the learning step
